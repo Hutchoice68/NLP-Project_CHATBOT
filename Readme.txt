@@ -1,4 +1,6 @@
+# LINE-Bot-PythonDev
 
+## What is LINE Messaging API
 1. A user sends a message to a LINE Official Account.
 2. The LINE Platform sends a webhook event to the webhook URL of the bot server.
 3. The bot server checks the webhook event and responds to the user through the LINE Platform. *(with your coding/logic)*
