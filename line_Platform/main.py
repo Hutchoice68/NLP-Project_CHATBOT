@@ -20,7 +20,7 @@ from linebot.v3.messaging import (
 )
 
 # เปลี่ยนจาก response_message เป็น reponse_message (ตามชื่อไฟล์เดิมของคุณ)
-from aaaa import reponse_message
+from response import reponse_message
 
 
 app = FastAPI()
