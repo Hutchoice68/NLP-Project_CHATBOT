@@ -1,34 +1,68 @@
 # Intent project with line and web platform
 
-## Create Virtual Environment
+##ขั้นตอนที่ 1: ติดตั้ง Dependencies
 
 ```
 python -m venv venv
-```
-where, `venv` is your virtual environment name
 
-## Activate Virtual Environment
-```
 venv\Scripts\activate
-```
 
-## Install Python Package
-To install , run `pip` command to install 
-```
 pip install -r requirements.txt
 ```
 
-## Environment Configuration
-Create file `.env` and put your token inside.
+## ขั้นตอนที่ 2: ตั้งค่า Environment Variables
+```
+# 1.สร้างไฟล์ .env
 
-```
-ACCESS_TOKEN=<Your dhannel access token>
-CHANNEL_SECRET=<Your Channel secret>
+# 2. ข้อมูลใน .env
+# --- LINE API ---
+ACCESS_TOKEN=
+CHANNEL_SECRET=
+
+# --- URL ---
+AI_CORE_URL=http://localhost:8001 #(แล้วแต่ว่าจะตั้งที่ port ไหน)
+
+# --- Path intent model ---
+MODEL_PATH=../models/thai_intent_model.pkl
+
+# --- LLM model ---
+OLLAMA_MODEL=llama3.2
 ```
 
-## Running FastAPI
-Using following command to run FastAPI on port 8000:
+## ขั้นตอนที่ 3: รัน Ollama (ถ้าต้องการใช้ LLM)
+Terminal 0 - เปิดก่อนทุกอย่าง
 ```
-uvicorn main:app --port 8000 --reload
+# รัน Ollama
+ollama serve
+
+# ใน terminal อื่น - ดาวน์โหลดโมเดล (ครั้งแรกเท่านั้น)
+ollama pull llama3.2
 ```
-The `reload` flag is for reload everytime that file made change.
+
+## ลำดับการรัน Services
+# รัน AI Core ก่อน เพื่อเปิดเซิฟเวอร์หลัก
+(สำคัญ)
+```
+#ต้องเข้าโฟลเดอร์ main ถึงจะรันเปิดเซิฟได้
+cd main
+```
+Terminal 1
+```
+uvicorn ai_core:app --host 0.0.0.0 --port 8001 --reload
+```
+
+# รัน LINE Bot
+Terminal 2 
+```
+uvicorn line:app --host 0.0.0.0 --port 8000 --reload
+```
+Terminal 3 อันนี้ใช้เปิด webhook ผ่าน ngrok(ต้องไปติดตั้งลงเครื่องก่อน)
+```
+ngrok http 8000
+```
+# รัน Web
+Terminal 4 
+```
+uvicorn web:app --host 0.0.0.0 --port 8002 --reload
+```
+จากนั้นก็เปิดบราวเซอร์: http://localhost:8002
