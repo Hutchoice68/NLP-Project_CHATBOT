@@ -1,6 +1,7 @@
 venv
 models/
 Data/
+test/
 **/.env
 **/.DS_Store
 **/__pycache__/
